@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SkillBridge AI – From Where You Are to Where You Want to Be</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#060a1c;--bg2:#0a1030;--card:#0e1638;--line:rgba(130,160,255,.14);--tx:#eaf0ff;--mu:#93a1c9;--blue:#3b82ff;--vio:#8b5cf6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#060a1c;--card:#0e1638}}
+:root[data-theme="dark"]{--bg:#060a1c}
+html{scroll-behavior:smooth;scroll-padding-top:84px;background:var(--bg)}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.fd{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;letter-spacing:-.02em}
+.grad{background:linear-gradient(120deg,#3b82ff,#8b5cf6);}
+.gtxt{background:linear-gradient(100deg,#7fb0ff,#b79bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{background:linear-gradient(180deg,rgba(20,30,75,.7),rgba(10,16,48,.85));border:1px solid var(--line);border-radius:22px}
+.glow{position:absolute;border-radius:9999px;filter:blur(110px);pointer-events:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:14px;padding:.8rem 1.4rem;font-weight:700;transition:transform .15s,box-shadow .2s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn-p{background:linear-gradient(120deg,#2f6bff,#7c4dff);box-shadow:0 10px 30px -8px rgba(80,110,255,.7)}
+.btn-p:hover{box-shadow:0 14px 40px -6px rgba(110,110,255,.9)}
+.btn-g{border:1px solid var(--line);background:rgba(255,255,255,.04)}.btn-g:hover{background:rgba(255,255,255,.09)}
+a:focus-visible,button:focus-visible{outline:2px solid #7fb0ff;outline-offset:3px}
+.bar{height:8px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}.bar i{display:block;height:100%;border-radius:9px;width:0;background:linear-gradient(90deg,#3b82ff,#8b5cf6);transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}.rv.in{opacity:1;transform:none}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s}.faq-a>div{overflow:hidden}.open .faq-a{grid-template-rows:1fr}.open .chev{transform:rotate(45deg)}
+.chev{transition:transform .25s}
+.tab[aria-selected=true]{background:linear-gradient(120deg,#2f6bff,#7c4dff);color:#fff;border-color:transparent}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.fl{animation:fl 6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+
+.fi{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:14px;padding:.8rem 1rem;color:var(--tx);outline:0;transition:border-color .2s,box-shadow .2s;font:inherit}
+.fi:focus{border-color:#5b8cff;box-shadow:0 0 0 3px rgba(59,130,255,.25)}.fi.bad{border-color:#f87171}
+select.fi option{background:#0e1638}
+.err{color:#fca5a5;font-size:.8rem;min-height:1.1rem;margin-top:.3rem}
+.opt{border:1px solid var(--line);border-radius:16px;padding:1rem;text-align:left;background:rgba(255,255,255,.04);transition:border-color .2s,background .2s}
+.opt:hover{background:rgba(255,255,255,.08)}.opt[aria-pressed=true]{border-color:#6f8dff;background:rgba(59,130,255,.18)}
+.nv{display:flex;align-items:center;gap:.75rem;padding:.7rem .9rem;border-radius:12px;color:var(--mu);width:100%;text-align:left}
+.nv:hover{background:rgba(255,255,255,.05);color:#fff}.nv[aria-current=page]{background:linear-gradient(120deg,#2f6bff,#7c4dff);color:#fff}
+.mb[aria-current=page]{color:#a9c0ff}
+input[type=range]{accent-color:#6f8dff;width:100%}
+button:disabled{opacity:.6;cursor:default}
+.spin{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,255,255,.15);border-top-color:#6f8dff;animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div id="site"><header id="nav" class="fixed top-0 inset-x-0 z-50 transition-all" style="padding-top:env(safe-area-inset-top,0px)">
+  <div class="mx-auto max-w-6xl px-4 mt-3">
+    <nav class="flex items-center justify-between rounded-2xl px-4 py-3 border" style="background:rgba(8,13,38,.72);backdrop-filter:blur(14px);border-color:var(--line)" aria-label="Main">
+      <a href="#top" class="flex items-center gap-2 font-extrabold fd text-lg">
+        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg)"/><path d="M5 21c4-9 8-9 11-9s7 0 11 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M10 21v-6M16 21v-9M22 21v-6" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/></svg>
+        SkillBridge AI
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm text-[var(--mu)]">
+        <a class="hover:text-white" href="#features">Features</a><a class="hover:text-white" href="#how">How it works</a><a class="hover:text-white" href="#pricing">Pricing</a>
+      </div>
+      <div class="hidden md:flex items-center gap-2">
+        <button class="btn btn-g !py-2 !px-4 text-sm" data-go="login">Login</button>
+        <button class="btn btn-p !py-2 !px-4 text-sm" data-go="signup">Get started</button>
+      </div>
+      <button id="burger" class="md:hidden p-2 rounded-lg" aria-label="Open menu" aria-expanded="false">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </nav>
+    <div id="mmenu" class="hidden md:hidden mt-2 card p-4 space-y-1 text-center">
+      <a class="block py-3" href="#features">Features</a><a class="block py-3" href="#how">How it works</a><a class="block py-3" href="#pricing">Pricing</a>
+      <div class="grid grid-cols-2 gap-2 pt-2"><button class="btn btn-g" data-go="login">Login</button><button class="btn btn-p" data-go="signup">Get started</button></div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="relative pt-32 md:pt-40 pb-10 overflow-hidden">
+  <div class="glow w-[520px] h-[520px] bg-blue-600/40 -top-40 -left-40"></div>
+  <div class="glow w-[480px] h-[480px] bg-violet-600/35 top-10 -right-40"></div>
+  <div class="relative mx-auto max-w-6xl px-5 text-center">
+    <div class="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm text-[var(--mu)]" style="border-color:var(--line);background:rgba(255,255,255,.04)"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>Now with AI mock interviews</div>
+    <h1 class="mt-6 text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.04] max-w-4xl mx-auto">From where you are to <span class="gtxt">where you want to be.</span></h1>
+    <p class="mt-6 text-lg text-[var(--mu)] max-w-2xl mx-auto">SkillBridge AI maps your current skills, finds the gaps for your dream role, and builds a weekly plan you can actually finish. Built for students, job seekers, and working professionals.</p>
+    <div class="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+      <button class="btn btn-p text-base" data-go="signup">Start free</button>
+      <a href="#roadmap" class="btn btn-g text-base">See a sample roadmap</a>
+    </div>
+    <p class="mt-4 text-sm text-[var(--mu)]">No credit card needed. Join 48,000+ learners.</p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="relative mx-auto max-w-6xl px-4 mt-14" id="dash">
+    <div class="absolute inset-x-10 -top-6 h-40 grad opacity-30 blur-3xl rounded-full"></div>
+    <div class="relative card p-2 md:p-3 shadow-2xl" style="box-shadow:0 40px 120px -30px rgba(70,100,255,.55)">
+      <div class="flex gap-1.5 px-3 py-2"><i class="w-2.5 h-2.5 rounded-full bg-red-400/70"></i><i class="w-2.5 h-2.5 rounded-full bg-yellow-400/70"></i><i class="w-2.5 h-2.5 rounded-full bg-green-400/70"></i></div>
+      <div class="grid md:grid-cols-[190px_1fr] gap-3 p-2 md:p-3 text-left">
+        <aside class="hidden md:flex flex-col gap-1 text-sm rounded-2xl p-3" style="background:rgba(255,255,255,.03)">
+          <div class="px-3 py-2 rounded-lg grad font-medium">Overview</div>
+          <div class="px-3 py-2 text-[var(--mu)]">My roadmap</div><div class="px-3 py-2 text-[var(--mu)]">Skill gaps</div><div class="px-3 py-2 text-[var(--mu)]">Practice labs</div><div class="px-3 py-2 text-[var(--mu)]">Mock interviews</div><div class="px-3 py-2 text-[var(--mu)]">Job matches</div>
+          <div class="mt-6 rounded-xl p-3 text-xs text-[var(--mu)]" style="background:rgba(139,92,246,.12)">AI coach tip: a 20-minute SQL drill today keeps your streak alive.</div>
+        </aside>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between"><div><div class="fd text-xl font-bold">Good morning, Maya</div><div class="text-sm text-[var(--mu)]">Goal: Data Analyst · 9 weeks to go</div></div><div class="rounded-full px-3 py-1 text-sm" style="background:rgba(251,191,36,.12);color:#fcd34d">🔥 23-day streak</div></div>
+          <div class="grid lg:grid-cols-3 gap-3">
+            <div class="rounded-2xl p-4 flex items-center gap-4" style="background:rgba(255,255,255,.04)">
+              <svg width="96" height="96" viewBox="0 0 96 96"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><circle cx="48" cy="48" r="40" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="9"/><circle id="ring" cx="48" cy="48" r="40" fill="none" stroke="url(#rg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251" transform="rotate(-90 48 48)" style="transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)"/><text x="48" y="54" text-anchor="middle" fill="#eaf0ff" font-size="22" font-weight="700" font-family="Bricolage Grotesque,sans-serif">72%</text></svg>
+              <div><div class="text-sm text-[var(--mu)]">Job readiness</div><div class="text-emerald-400 text-sm mt-1">+8% this month</div></div>
+            </div>
+            <div class="rounded-2xl p-4 lg:col-span-2" style="background:rgba(255,255,255,.04)">
+              <div class="text-sm text-[var(--mu)] mb-3">Skill progress</div>
+              <div id="skills" class="space-y-3"></div>
+            </div>
+          </div>
+          <div class="grid lg:grid-cols-3 gap-3">
+            <div class="rounded-2xl p-4" style="background:rgba(255,255,255,.04)"><div class="text-sm text-[var(--mu)] mb-3">Study hours this week</div><div id="wk" class="flex items-end gap-2 h-24"></div></div>
+            <div class="rounded-2xl p-4 lg:col-span-2" style="background:rgba(255,255,255,.04)"><div class="text-sm text-[var(--mu)] mb-3">Up next</div>
+              <ul class="space-y-2 text-sm">
+                <li class="flex justify-between gap-2"><span>Window functions in SQL</span><span class="text-[var(--mu)] shrink-0">35 min</span></li>
+                <li class="flex justify-between gap-2"><span>Build a sales dashboard in Tableau</span><span class="text-[var(--mu)] shrink-0">Project</span></li>
+                <li class="flex justify-between gap-2"><span>Mock interview: case study round</span><span class="text-[var(--mu)] shrink-0">Tomorrow</span></li>
+              </ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="py-24">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="max-w-2xl rv"><h2 class="text-3xl md:text-5xl font-extrabold">One platform for every step between here and hired</h2><p class="mt-4 text-[var(--mu)] text-lg">Stop juggling playlists, spreadsheets, and job boards. SkillBridge keeps your learning, practice, and applications in one plan.</p></div>
+    <div id="feat" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" class="py-24" style="background:linear-gradient(180deg,transparent,var(--bg2),transparent)">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-3xl md:text-5xl font-extrabold max-w-2xl rv">Your plan is ready in four steps</h2>
+    <ol id="steps" class="mt-12 grid md:grid-cols-4 gap-5"></ol>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="py-24">
+  <div class="mx-auto max-w-4xl px-5">
+    <div class="text-center rv"><h2 class="text-3xl md:text-5xl font-extrabold">See your roadmap before you commit</h2><p class="mt-4 text-[var(--mu)] text-lg">Pick a target role to preview a sample path. Yours adapts to your pace and starting point.</p></div>
+    <div id="tabs" role="tablist" class="mt-8 flex flex-wrap gap-2 justify-center"></div>
+    <div class="card p-6 md:p-8 mt-6"><div class="flex flex-wrap justify-between gap-2 mb-6"><div id="rm-title" class="fd text-xl font-bold"></div><div id="rm-meta" class="text-sm text-[var(--mu)]"></div></div><div id="rm" class="relative"></div></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="py-24 relative overflow-hidden">
+  <div class="glow w-[500px] h-[400px] bg-violet-700/25 left-1/2 -translate-x-1/2 top-20"></div>
+  <div class="relative mx-auto max-w-6xl px-5">
+    <div class="text-center"><h2 class="text-3xl md:text-5xl font-extrabold">Simple pricing that grows with you</h2><p class="mt-3 text-sm text-[var(--mu)]">Illustrative prices for this concept page.</p>
+      <div class="mt-6 inline-flex rounded-full p-1 border" style="border-color:var(--line);background:rgba(255,255,255,.04)" role="group" aria-label="Billing period">
+        <button id="b-m" class="tab px-5 py-2 rounded-full text-sm font-medium border border-transparent" aria-selected="true">Monthly</button>
+        <button id="b-y" class="tab px-5 py-2 rounded-full text-sm font-medium border border-transparent" aria-selected="false">Yearly · save 25%</button>
+      </div></div>
+    <div id="plans" class="mt-12 grid md:grid-cols-3 gap-5 items-stretch"></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="py-24">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-3xl md:text-5xl font-extrabold max-w-2xl">People who crossed the bridge</h2>
+    <div id="tm" class="mt-12 grid md:grid-cols-3 gap-5"></div>
+    <p class="mt-4 text-xs text-[var(--mu)]">Sample testimonials for demonstration.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-24">
+  <div class="mx-auto max-w-3xl px-5">
+    <h2 class="text-3xl md:text-5xl font-extrabold text-center">Questions, answered</h2>
+    <div id="faqs" class="mt-10 space-y-3"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="px-5 pb-24">
+  <div class="mx-auto max-w-5xl rounded-[28px] p-10 md:p-16 text-center relative overflow-hidden grad">
+    <div class="absolute inset-0 opacity-30" style="background:radial-gradient(circle at 80% 0%,#fff,transparent 50%)"></div>
+    <h2 class="relative text-3xl md:text-5xl font-extrabold">Your next role starts with a plan</h2>
+    <p class="relative mt-4 text-white/85 text-lg">Build your free roadmap in under five minutes.</p>
+    <button class="relative btn mt-8 bg-white text-[#14205a] text-base" data-go="signup">Create my roadmap</button>
+  </div>
+</section>
+</main>
+
+<footer class="border-t" style="border-color:var(--line)">
+  <div class="mx-auto max-w-6xl px-5 py-14 grid gap-10 md:grid-cols-5">
+    <div class="md:col-span-2"><div class="fd font-extrabold text-lg">SkillBridge AI</div><p class="mt-3 text-[var(--mu)] max-w-xs">From where you are to where you want to be.</p></div>
+    <div class="text-sm space-y-2"><div class="font-bold mb-3">Product</div><a class="block text-[var(--mu)] hover:text-white" href="#features">Features</a><a class="block text-[var(--mu)] hover:text-white" href="#roadmap">Roadmaps</a><a class="block text-[var(--mu)] hover:text-white" href="#pricing">Pricing</a></div>
+    <div class="text-sm space-y-2"><div class="font-bold mb-3">Company</div><a class="block text-[var(--mu)] hover:text-white" href="#top">About</a><a class="block text-[var(--mu)] hover:text-white" href="#top">Careers</a><a class="block text-[var(--mu)] hover:text-white" href="#faq">Help center</a></div>
+    <div class="text-sm space-y-2"><div class="font-bold mb-3">Legal</div><a class="block text-[var(--mu)] hover:text-white" href="#top">Privacy</a><a class="block text-[var(--mu)] hover:text-white" href="#top">Terms</a><a class="block text-[var(--mu)] hover:text-white" href="#top">Security</a></div>
+  </div>
+  <div class="border-t py-6 text-center text-sm text-[var(--mu)]" style="border-color:var(--line)">© 2026 SkillBridge AI. All rights reserved.</div>
+</footer></div><div id="views" class="hidden"></div>
+
+<div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-[60] card px-5 py-3 text-sm opacity-0 pointer-events-none transition-opacity" style="margin-bottom:env(safe-area-inset-bottom,0px)" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const ic=(d,s=24)=>`<svg width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">${d}</svg>`;
+
+// Dashboard data
+const skills=[["SQL & databases",82],["Excel & spreadsheets",91],["Data visualization",64],["Statistics",58],["Python for analysis",46]];
+$('#skills').innerHTML=skills.map(([n,v])=>`<div><div class="flex justify-between text-sm mb-1.5"><span>${n}</span><span class="text-[var(--mu)]">${v}%</span></div><div class="bar"><i data-w="${v}"></i></div></div>`).join('');
+const days=[["M",1.5],["T",2.2],["W",1.0],["T",2.8],["F",1.9],["S",3.1],["S",0.8]];
+$('#wk').innerHTML=days.map(([d,h])=>`<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end"><div class="w-full rounded-md grad" style="height:0" data-h="${h/3.2*100}"></div><span class="text-xs text-[var(--mu)]">${d}</span></div>`).join('');
+setTimeout(()=>{document.querySelectorAll('[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');document.querySelectorAll('[data-h]').forEach(e=>{e.style.transition='height 1s';e.style.height=e.dataset.h+'%'});$('#ring').style.strokeDashoffset=251*(1-.72)},350);
+
+// Features
+const feats=[
+["Skill gap analysis","Upload a résumé or take a 10-minute assessment. We compare you to real job requirements and show exactly what’s missing.",'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>'],
+["Personalized roadmaps","A week-by-week plan built around your goal, your schedule, and the hours you actually have.",'<path d="M4 19c4-12 12 0 16-14"/><circle cx="4" cy="19" r="1.5"/><circle cx="20" cy="5" r="1.5"/>'],
+["AI career coach","Ask anything, from “what should I learn first?” to “how do I explain this career switch?” and get clear answers.",'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>'],
+["Practice labs","Hands-on exercises with instant feedback so skills stick, not just get watched.",'<path d="M9 3h6M10 3v6L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-6-10V3"/>'],
+["Mock interviews","Rehearse behavioral and technical rounds with an AI interviewer and get a scored breakdown.",'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>'],
+["Job match tracker","See roles that fit your growing skills, and track every application in one place.",'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>']];
+$('#feat').innerHTML=feats.map(([t,d,i],k)=>`<div class="card p-6 rv hover:-translate-y-1 transition-transform" style="transition-delay:${k*60}ms"><div class="w-12 h-12 rounded-2xl grid place-items-center grad">${ic(i)}</div><h3 class="mt-5 text-xl font-bold">${t}</h3><p class="mt-2 text-[var(--mu)]">${d}</p></div>`).join('');
+
+// Steps
+const steps=[["Tell us your goal","Pick a target role or describe it in your own words."],["Map your skills","Take a short assessment or import your résumé."],["Follow your plan","Work through bite-size lessons, labs, and projects."],["Land the role","Practice interviews and apply to matched jobs."]];
+$('#steps').innerHTML=steps.map(([t,d],i)=>`<li class="card p-6 rv relative"><div class="w-10 h-10 rounded-full grad grid place-items-center font-bold fd">${i+1}</div><h3 class="mt-4 text-lg font-bold">${t}</h3><p class="mt-2 text-sm text-[var(--mu)]">${d}</p></li>`).join('');
+
+// Roadmap
+const paths={
+"Data Analyst":{meta:"12 weeks · 6 hrs/week",m:[["Weeks 1–2","Spreadsheet mastery","Pivot tables, lookups, clean data",1],["Weeks 3–5","SQL foundations","Joins, aggregates, window functions",1],["Weeks 6–8","Visualization & storytelling","Tableau dashboard project",0],["Weeks 9–10","Statistics essentials","A/B tests and regression basics",0],["Weeks 11–12","Portfolio & interviews","3 case studies, mock rounds",0]]},
+"UX Designer":{meta:"14 weeks · 7 hrs/week",m:[["Weeks 1–2","Design fundamentals","Layout, type, color, hierarchy",1],["Weeks 3–5","User research","Interviews, personas, journey maps",1],["Weeks 6–9","Prototyping in Figma","Wireframes to clickable flows",0],["Weeks 10–12","Usability testing","Run tests, iterate on feedback",0],["Weeks 13–14","Portfolio & interviews","2 case studies, design critique practice",0]]},
+"Full-Stack Developer":{meta:"20 weeks · 8 hrs/week",m:[["Weeks 1–3","Web fundamentals","HTML, CSS, modern JavaScript",1],["Weeks 4–8","Front-end with React","Components, state, routing",1],["Weeks 9–13","Back-end & APIs","Node, databases, authentication",0],["Weeks 14–17","Ship a real app","Deploy, test, monitor",0],["Weeks 18–20","Portfolio & interviews","System design and coding rounds",0]]}};
+let cur="Data Analyst";
+function drawRM(){const p=paths[cur];$('#rm-title').textContent=cur+" roadmap";$('#rm-meta').textContent=p.meta;
+$('#tabs').innerHTML=Object.keys(paths).map(k=>`<button role="tab" class="tab px-5 py-2 rounded-full text-sm font-medium border" style="border-color:var(--line)" aria-selected="${k===cur}" data-p="${k}">${k}</button>`).join('');
+$('#rm').innerHTML=`<div class="absolute left-[15px] top-2 bottom-2 w-px" style="background:var(--line)"></div>`+p.m.map(([w,t,d,done])=>`<div class="relative pl-12 pb-7 last:pb-0"><div class="absolute left-0 top-0 w-8 h-8 rounded-full grid place-items-center ${done?'grad':''}" style="${done?'':'background:var(--bg);border:2px solid var(--line)'}">${done?ic('<path d="M5 12l5 5 9-10"/>',16):''}</div><div class="text-xs text-[var(--mu)]">${w}</div><div class="font-bold text-lg fd">${t}</div><div class="text-[var(--mu)] text-sm">${d}</div></div>`).join('');}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b){cur=b.dataset.p;drawRM()}});drawRM();
+
+// Pricing
+const plans=[
+{n:"Free",m:0,y:0,d:"Explore your path and build the habit.",f:["1 career roadmap","Basic skill assessment","5 AI coach messages per day","Community access"],c:"Start free"},
+{n:"Pro",m:12,y:9,d:"Everything you need to switch roles or level up.",f:["Unlimited roadmaps","Full skill gap analysis","Unlimited AI coach","Practice labs & projects","Progress analytics"],c:"Go Pro",pop:1},
+{n:"Premium",m:29,y:22,d:"Interview-ready with hands-on career support.",f:["Everything in Pro","AI mock interviews with scoring","Résumé & LinkedIn review","Job match tracker","Monthly 1:1 mentor session"],c:"Go Premium"}];
+let yearly=false;
+function drawPlans(){$('#plans').innerHTML=plans.map(p=>`<div class="card p-7 flex flex-col relative ${p.pop?'md:-mt-4 md:mb-[-16px]':''}" style="${p.pop?'border-color:rgba(124,140,255,.6);box-shadow:0 30px 80px -30px rgba(90,100,255,.7)':''}">${p.pop?'<div class="absolute -top-3 left-1/2 -translate-x-1/2 grad rounded-full px-3 py-1 text-xs font-bold">Most popular</div>':''}<h3 class="text-xl font-bold">${p.n}</h3><p class="text-sm text-[var(--mu)] mt-1 min-h-[40px]">${p.d}</p><div class="mt-5 flex items-end gap-1"><span class="fd text-5xl font-extrabold">$${yearly?p.y:p.m}</span><span class="text-[var(--mu)] mb-2">/month</span></div><div class="text-xs text-[var(--mu)] h-4">${p.m&&yearly?`Billed $${p.y*12} yearly`:''}</div><ul class="mt-6 space-y-3 text-sm flex-1">${p.f.map(x=>`<li class="flex gap-2"><span class="text-blue-400">${ic('<path d="M5 12l5 5 9-10"/>',18)}</span>${x}</li>`).join('')}</ul><button class="btn ${p.pop?'btn-p':'btn-g'} mt-8 w-full" data-go="signup" data-plan="${p.n}">${p.c}</button></div>`).join('');}
+function setBill(y){yearly=y;$('#b-m').setAttribute('aria-selected',!y);$('#b-y').setAttribute('aria-selected',y);drawPlans()}
+$('#b-m').onclick=()=>setBill(false);$('#b-y').onclick=()=>setBill(true);drawPlans();
+
+// Testimonials
+const tms=[["I went from retail manager to junior data analyst in five months. The weekly plan removed all the guesswork.","Priya Nair","Data Analyst at Northwind","PN"],["The mock interviews were brutal in the best way. By my real interview, nothing surprised me.","Daniel Okafor","Product Designer at Lumen","DO"],["As a final-year student I had no idea what to learn. SkillBridge showed my gaps and I landed two offers.","Sofia Alvarez","Software Engineer at Brightpath","SA"]];
+$('#tm').innerHTML=tms.map(([q,n,r,i])=>`<figure class="card p-7 flex flex-col"><div class="text-yellow-300 tracking-widest" aria-label="5 stars">★★★★★</div><blockquote class="mt-4 text-lg leading-relaxed flex-1">“${q}”</blockquote><figcaption class="mt-6 flex items-center gap-3"><div class="w-11 h-11 rounded-full grad grid place-items-center font-bold text-sm">${i}</div><div><div class="font-bold">${n}</div><div class="text-sm text-[var(--mu)]">${r}</div></div></figcaption></figure>`).join('');
+
+// FAQ
+const faqs=[["Who is SkillBridge AI for?","Students choosing a first career, job seekers closing skill gaps, and professionals changing roles or moving up."],["How does the AI build my roadmap?","It compares your assessed skills with the requirements of your target role, then sequences lessons, labs, and projects around the hours you have each week."],["Can I use it for free?","Yes. The Free plan includes one roadmap and a basic assessment. Upgrade only when you want deeper analysis and interview practice."],["Can I switch or cancel plans anytime?","Yes. Change plans or cancel from your account settings at any time. You keep your roadmaps either way."],["Is my data private?","Your résumé and progress are yours. We never sell personal data, and you can export or delete it whenever you like."]];
+$('#faqs').innerHTML=faqs.map(([q,a],i)=>`<div class="card ${i==0?'open':''}"><button class="w-full flex justify-between items-center gap-4 text-left p-5 font-bold fd text-lg" aria-expanded="${i==0}"><span>${q}</span><span class="chev text-2xl text-blue-400 shrink-0">+</span></button><div class="faq-a"><div><p class="px-5 pb-5 text-[var(--mu)]">${a}</p></div></div></div>`).join('');
+$('#faqs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const c=b.parentElement,o=c.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+
+// Nav, toast, reveal
+$('#burger').onclick=()=>{const m=$('#mmenu'),h=m.classList.toggle('hidden');$('#burger').setAttribute('aria-expanded',!h)};
+$('#mmenu').addEventListener('click',e=>{if(e.target.closest('a'))$('#mmenu').classList.add('hidden')});
+let tt;document.addEventListener('click',e=>{const b=e.target.closest('[data-toast]');if(!b)return;const t=$('#toast');t.textContent=b.dataset.toast;t.style.opacity=1;clearTimeout(tt);tt=setTimeout(()=>t.style.opacity=0,2600)});
+try{const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12});document.querySelectorAll('.rv').forEach(e=>io.observe(e))}catch(e){document.querySelectorAll('.rv').forEach(e=>e.classList.add('in'))}
+
+
+/* ===== APP: Supabase Auth + profiles table (publishable key only, RLS enforced by your database) ===== */
+/* ===================== SUPABASE CONFIG =====================
+   Paste YOUR values below. Use the PUBLISHABLE (anon) key only.
+   NEVER paste a secret or service_role key into this file. */
+const SUPABASE_URL='PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';
+const SUPABASE_PUBLISHABLE_KEY='PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
+/* ============================================================ */
+const BOOT_HASH=location.hash;
+const LVBASE={Beginner:18,Intermediate:40,Advanced:62};
+const S={user:null,uid:null,ob:null,view:'overview',plan:'',q:0,pending:null,notice:'',booting:true,sync:'saved'};
+const cfgCheck=(u,k)=>{
+ if(/PASTE/.test(u+k))return 'Supabase isn’t connected yet. Paste your Project URL and publishable key below.';
+ if(!u||!k)return 'Enter both your Project URL and your publishable key.';
+ if(!/^https:\/\/[a-z0-9-]+\.supabase\.(co|in)$/i.test(u))return 'The Project URL should look like https://your-project-ref.supabase.co';
+ if(/^sb_secret_/.test(k))return 'That looks like a secret key. Never use it in a browser. Use the publishable key instead.';
+ try{const p=k.split('.')[1];if(p&&JSON.parse(atob(p.replace(/-/g,'+').replace(/_/g,'/'))).role==='service_role')return 'That is a service_role key. Never use it in a browser. Use the publishable (anon) key instead.'}catch(e){}
+ return ''};
+const CFG=(()=>{let u=SUPABASE_URL,k=SUPABASE_PUBLISHABLE_KEY;if(/PASTE/.test(u+k)){try{const c=JSON.parse(localStorage.getItem('sb_cfg')||'null');if(c&&c.url&&c.key){u=c.url;k=c.key}}catch(e){}}return{u:String(u).trim().replace(/\/+$/,''),k:String(k).trim()}})();
+const cfgError=()=>cfgCheck(CFG.u,CFG.k)||(window.supabase&&window.supabase.createClient?'':'The Supabase library didn’t load. Check your internet connection and reload the page.');
+const sb=cfgError()?null:window.supabase.createClient(CFG.u,CFG.k,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const T=m=>{const t=$('#toast');t.textContent=m;t.style.opacity=1;clearTimeout(tt);tt=setTimeout(()=>t.style.opacity=0,2600)};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const EM=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const ini=n=>n.trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+const go=h=>{if(location.hash.slice(1)===h)R();else location.hash=h};
+const val=id=>($('#'+id)||{}).value||'';
+const err=(id,m)=>{const e=$('#e-'+id),i=$('#'+id);if(e)e.textContent=m||'';if(i){i.classList.toggle('bad',!!m);i.setAttribute('aria-invalid',!!m)}return !m};
+const V={
+ name:id=>err(id,val(id).trim().length<2?'Enter your full name (at least 2 characters).':''),
+ email:id=>err(id,!val(id).trim()?'Enter your email address.':!EM.test(val(id).trim())?'Enter a valid email, like name@example.com.':''),
+ pw:id=>err(id,val(id).length<8?'Use at least 8 characters.':!/[a-z]/i.test(val(id))||!/\d/.test(val(id))?'Include at least one letter and one number.':''),
+ pw1:id=>err(id,val(id)?'':'Enter your password.'),
+ cf:id=>err(id,val(id)&&val(id)===val('su-pw')?'':'Passwords don’t match.')};
+const AP={...paths,
+"Product Manager":{meta:"12 weeks · 6 hrs/week",m:[["Weeks 1–2","Product fundamentals","Discovery, problem framing, roadmaps"],["Weeks 3–5","Data-informed decisions","Metrics, funnels, experiments"],["Weeks 6–9","Specs & stakeholders","PRDs, prioritization, communication"],["Weeks 10–12","Portfolio & interviews","Case studies, product sense practice"]]},
+"Digital Marketer":{meta:"10 weeks · 5 hrs/week",m:[["Weeks 1–2","Marketing foundations","Audiences, channels, positioning"],["Weeks 3–5","SEO & content","Keyword research, on-page SEO"],["Weeks 6–8","Paid & analytics","Campaign setup, GA4 reporting"],["Weeks 9–10","Portfolio & interviews","Campaign case study, mock rounds"]]}};
+const SKO=["SQL","Excel","Python","Statistics","Data visualization","Figma","User research","JavaScript","React","SEO","Communication","Project management"],LV=["Beginner","Intermediate","Advanced"],ST=["Student","Job seeker","Working professional"];
+const QS=["Tell me about a time you learned a new skill quickly.","Describe a project you’re proud of and your role in it.","How do you handle feedback you disagree with?"];
+const logo=()=>`<a href="#top" class="flex items-center gap-2 font-extrabold fd text-lg"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg2)"/><path d="M5 21c4-9 8-9 11-9s7 0 11 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M10 21v-6M16 21v-9M22 21v-6" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/></svg>SkillBridge AI</a>`;
+const F=(id,label,type,ph,ac,v0='')=>`<div><label for="${id}" class="block text-sm mb-1.5 text-[var(--mu)]">${label}</label><div class="relative"><input id="${id}" type="${type}" placeholder="${ph}" autocomplete="${ac}" value="${esc(v0)}" class="fi w-full" aria-describedby="e-${id}">${type==='password'?`<button type="button" data-eye="${id}" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--mu)] hover:text-white" aria-label="Show password">Show</button>`:''}</div><p id="e-${id}" class="err" role="alert"></p></div>`;
+const NOTE=`<div class="mt-6 rounded-xl p-4 text-xs leading-relaxed text-[var(--mu)]" style="background:rgba(139,92,246,.1);border:1px solid var(--line)"><b class="text-white">Secured by Supabase Auth.</b> This app never stores your password, and your profile is saved to your own account.</div>`;
+const glows=`<div class="glow w-[420px] h-[420px] bg-blue-600/35 -top-32 -left-32"></div><div class="glow w-[420px] h-[420px] bg-violet-600/30 bottom-0 right-0"></div>`;
+
+/* ---------- Auth ---------- */
+function authView(m){const L=m==='login';
+const form=m==='verify'?verifyHTML():L?`<h1 class="text-3xl font-extrabold">Welcome back</h1><p class="mt-2 text-[var(--mu)]">Log in to continue your roadmap.</p><form id="f-login" novalidate class="mt-6 space-y-4">${F('li-email','Email','email','you@example.com','email')}${F('li-pw','Password','password','Your password','current-password')}<p id="e-form" class="err" role="alert"></p><button class="btn btn-p w-full">Log in</button></form><p class="mt-5 text-sm text-center text-[var(--mu)]">New to SkillBridge? <a href="#signup" class="text-blue-300 font-medium">Create an account</a></p>`
+:`<h1 class="text-3xl font-extrabold">Create your account</h1><p class="mt-2 text-[var(--mu)]">Start free. Setting up your roadmap takes about two minutes.</p>${S.plan?`<p class="mt-2 text-sm text-blue-300">Plan selected: ${esc(S.plan)} (billing isn’t available yet, you’ll start on Free)</p>`:''}<form id="f-signup" novalidate class="mt-6 space-y-3">${F('su-name','Full name','text','Maya Rahman','name')}${F('su-email','Email','email','you@example.com','email')}${F('su-pw','Password','password','At least 8 characters','new-password')}<div id="meter" class="flex gap-1 -mt-2">${'<i class="h-1.5 flex-1 rounded-full" style="background:rgba(255,255,255,.1)"></i>'.repeat(4)}</div><p id="mtxt" class="text-xs text-[var(--mu)] min-h-[1rem]"></p>${F('su-cf','Confirm password','password','Repeat your password','new-password')}<label class="flex gap-3 text-sm text-[var(--mu)]"><input id="terms" type="checkbox" class="mt-1 accent-blue-500 w-4 h-4 shrink-0">I agree to the Terms and Privacy Policy.</label><p id="e-terms" class="err" role="alert"></p><p id="e-form" class="err" role="alert"></p><button class="btn btn-p w-full">Create account</button></form><p class="mt-5 text-sm text-center text-[var(--mu)]">Already have an account? <a href="#login" class="text-blue-300 font-medium">Log in</a></p>`;
+return `<div class="min-h-screen grid lg:grid-cols-2 relative overflow-hidden">${glows}
+<div class="hidden lg:flex relative flex-col justify-between p-12" style="background:linear-gradient(160deg,rgba(20,30,75,.6),transparent)">${logo()}<div><h2 class="text-5xl font-extrabold leading-tight">From where you are to <span class="gtxt">where you want to be.</span></h2><p class="mt-5 text-[var(--mu)] text-lg max-w-md">Your skills, your goal, and a weekly plan that fits your life.</p><div class="card p-5 max-w-sm mt-10 fl"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full grad grid place-items-center font-bold text-sm">MR</div><div><div class="font-bold">Maya Rahman</div><div class="text-xs text-[var(--mu)]">Data Analyst track · 72% job-ready</div></div></div><div class="bar mt-4"><i style="width:72%"></i></div></div></div><p class="text-sm text-[var(--mu)]">© 2026 SkillBridge AI</p></div>
+<div class="relative flex items-center justify-center p-5 py-10"><div class="w-full max-w-md"><div class="lg:hidden mb-8">${logo()}</div><div class="card p-7 md:p-8">${topNote()}${form}${NOTE}</div><p class="mt-5 text-center text-sm"><a href="#top" class="text-[var(--mu)] hover:text-white">Back to home</a></p></div></div></div>`}
+
+/* ---------- Onboarding ---------- */
+function obView(){const o=S.ob=S.ob||{step:0,goal:'',level:'',status:'',skills:[],hours:6},s=o.step;
+const titles=["What role are you aiming for?","Where are you starting from?","Which skills do you already have?","Review your setup"];
+const opt=(a,v,on,sub='')=>`<button type="button" class="opt" data-a="${a}" data-v="${esc(v)}" aria-pressed="${on}"><div class="font-bold">${esc(v)}</div>${sub?`<div class="text-xs text-[var(--mu)] mt-1">${sub}</div>`:''}</button>`;
+let b='';
+if(s==0)b=`<div class="grid sm:grid-cols-2 gap-3">${Object.keys(AP).map(g=>opt('goal',g,o.goal===g,AP[g].meta)).join('')}</div>`;
+if(s==1)b=`<div class="text-sm text-[var(--mu)] mb-2">Experience level</div><div class="grid sm:grid-cols-3 gap-3">${LV.map(g=>opt('level',g,o.level===g)).join('')}</div><div class="text-sm text-[var(--mu)] mt-6 mb-2">I am currently a…</div><div class="grid sm:grid-cols-3 gap-3">${ST.map(g=>opt('status',g,o.status===g)).join('')}</div>`;
+if(s==2)b=`<div class="flex flex-wrap gap-2">${SKO.map(g=>`<button type="button" class="opt !py-2 !px-4 !rounded-full text-sm" data-a="skill" data-v="${g}" aria-pressed="${o.skills.includes(g)}">${g}</button>`).join('')}</div><div class="mt-7"><label for="hrs" class="flex justify-between text-sm"><span class="text-[var(--mu)]">Study time per week</span><b id="hv">${o.hours} hours</b></label><input id="hrs" type="range" min="2" max="20" value="${o.hours}" class="mt-3"></div>`;
+if(s==3)b=`<div class="rounded-2xl p-5 space-y-3 text-sm" style="background:rgba(255,255,255,.04)">${[["Goal",o.goal],["Level",o.level],["Status",o.status],["Skills",o.skills.join(', ')],["Weekly time",o.hours+' hours']].map(([k,v])=>`<div class="flex justify-between gap-4"><span class="text-[var(--mu)]">${k}</span><span class="text-right font-medium">${esc(v)}</span></div>`).join('')}</div>`;
+return `<div class="min-h-screen relative overflow-hidden">${glows}<div class="relative mx-auto max-w-2xl px-5 py-8"><div class="flex justify-between items-center">${logo()}<button class="text-sm text-[var(--mu)] hover:text-white" data-a="logout">Log out</button></div><div class="mt-10 flex items-center gap-3 text-sm text-[var(--mu)]"><span>Step ${s+1} of 4</span><div class="bar flex-1"><i style="width:${(s+1)*25}%"></i></div></div><h1 class="mt-6 text-3xl md:text-4xl font-extrabold">${titles[s]}</h1><div class="card p-6 mt-6">${b}<p id="e-ob" class="err" role="alert"></p></div><div class="mt-6 flex justify-between">${s?'<button class="btn btn-g" data-a="back">Back</button>':'<span></span>'}<button class="btn btn-p" data-a="${s==3?'finish':'next'}">${s==3?'Build my roadmap':'Continue'}</button></div></div></div>`}
+
+/* ---------- Dashboard ---------- */
+const NAV=[["overview","Overview",'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'],["roadmap","Roadmap",'<path d="M4 19c4-12 12 0 16-14"/><circle cx="4" cy="19" r="1.5"/><circle cx="20" cy="5" r="1.5"/>'],["skills","Skills",'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>'],["practice","Practice",'<path d="M9 3h6M10 3v6L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-6-10V3"/>'],["interviews","Interview",'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>'],["settings","Settings",'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>']];
+const bar=([n,v])=>`<div><div class="flex justify-between text-sm mb-1.5"><span>${esc(n)}</span><span class="text-[var(--mu)]">${v}%</span></div><div class="bar"><i data-w="${v}"></i></div></div>`;
+const rdy=x=>{const v=Object.values(x.sk),a=v.length?v.reduce((s,n)=>s+n,0)/v.length:0;return Math.min(99,Math.round(a*.55+x.done.length/AP[x.goal].m.length*45))};
+const gr=()=>{const h=new Date().getHours();return h<12?'morning':h<18?'afternoon':'evening'};
+const H1=(t,s)=>`<h1 class="text-3xl md:text-4xl font-extrabold">${t}</h1><p class="text-[var(--mu)] mt-1">${s}</p>`;
+function renderDash(){const x=S.user;$('#views').innerHTML=`<div class="min-h-screen md:flex"><aside class="hidden md:flex w-64 shrink-0 flex-col p-5 border-r sticky top-0 h-screen" style="border-color:var(--line);background:rgba(8,13,38,.6)">${logo()}<nav class="mt-8 space-y-1" aria-label="App">${NAV.map(([k,l,i])=>`<button class="nv" data-a="nav" data-v="${k}" data-k="${k}">${ic(i)}${l}</button>`).join('')}</nav><div class="mt-auto card p-4 text-sm"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full grad grid place-items-center font-bold text-sm shrink-0">${ini(x.name)}</div><div class="min-w-0"><div class="font-bold truncate">${esc(x.name)}</div><div class="text-xs text-[var(--mu)] truncate">${esc(x.email)}</div></div></div><button class="btn btn-g w-full mt-3 !py-2" data-a="logout">Log out</button></div></aside>
+<div class="flex-1 min-w-0"><div id="sync" class="text-center text-xs py-2 px-3 text-[var(--mu)]" style="background:rgba(139,92,246,.12)" role="status">${syncText()}</div><main id="panel" class="p-5 md:p-8 pb-28 md:pb-10 max-w-5xl mx-auto"></main></div>
+<nav class="md:hidden fixed bottom-0 inset-x-0 z-40 grid grid-cols-6 border-t" style="background:rgba(8,13,38,.94);backdrop-filter:blur(14px);border-color:var(--line);padding-bottom:env(safe-area-inset-bottom,0px)" aria-label="App">${NAV.map(([k,l,i])=>`<button class="mb flex flex-col items-center gap-1 py-2.5 text-[10px] text-[var(--mu)]" data-a="nav" data-v="${k}" data-k="${k}">${ic(i,22)}${l}</button>`).join('')}</nav></div>`;panel()}
+function panel(){const m={overview:pOv,roadmap:pRm,skills:pSk,practice:pPr,interviews:pIv,settings:pSt};$('#panel').innerHTML=m[S.view]();document.querySelectorAll('[data-k]').forEach(b=>b.setAttribute('aria-current',b.dataset.k===S.view?'page':'false'));setTimeout(()=>{document.querySelectorAll('#panel [data-w]').forEach(e=>e.style.width=e.dataset.w+'%');const r=$('#ring2');if(r)r.style.strokeDashoffset=251*(1-r.dataset.r/100)},40)}
+function pOv(){const x=S.user,p=AP[x.goal],tot=p.m.length,dn=x.done.length,rd=rdy(x),nx=p.m.findIndex((_,i)=>!x.done.includes(i));
+return `<div class="flex flex-wrap items-center justify-between gap-3"><div>${H1('Good '+gr()+', '+esc(x.name.split(' ')[0]),'Goal: '+esc(x.goal)+' · '+x.hours+' hrs/week')}</div><div class="rounded-full px-3 py-1 text-sm" style="background:rgba(251,191,36,.12);color:#fcd34d">🔥 ${x.streak}-day streak</div></div>
+<div class="mt-6 grid md:grid-cols-3 gap-4"><div class="card p-5 flex items-center gap-4"><svg width="96" height="96" viewBox="0 0 96 96"><defs><linearGradient id="rg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82ff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><circle cx="48" cy="48" r="40" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="9"/><circle id="ring2" data-r="${rd}" cx="48" cy="48" r="40" fill="none" stroke="url(#rg2)" stroke-width="9" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251" transform="rotate(-90 48 48)" style="transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)"/><text x="48" y="54" text-anchor="middle" fill="#eaf0ff" font-size="22" font-weight="700" font-family="Bricolage Grotesque,sans-serif">${rd}%</text></svg><div><div class="text-sm text-[var(--mu)]">Job readiness</div><div class="text-xs text-[var(--mu)] mt-1">Skills + roadmap progress</div></div></div>
+<div class="card p-5"><div class="text-sm text-[var(--mu)]">Milestones</div><div class="fd text-4xl font-extrabold mt-2">${dn}/${tot}</div><div class="bar mt-3"><i data-w="${dn/tot*100}"></i></div></div>
+<div class="card p-5"><div class="text-sm text-[var(--mu)]">Hours studied</div><div class="fd text-4xl font-extrabold mt-2">${x.hrs.toFixed(1)}</div><div class="text-xs text-[var(--mu)] mt-3">Weekly target: ${x.hours} hours</div></div></div>
+<div class="mt-4 grid lg:grid-cols-5 gap-4"><div class="card p-5 lg:col-span-3"><div class="flex justify-between mb-4"><h2 class="fd font-bold text-lg">Skill progress</h2><button class="text-sm text-blue-300" data-a="nav" data-v="skills">View all</button></div><div class="space-y-4">${Object.entries(x.sk).slice(0,5).map(bar).join('')}</div></div>
+<div class="card p-5 lg:col-span-2"><h2 class="fd font-bold text-lg">Up next</h2>${nx<0?'<p class="mt-3 text-[var(--mu)]">Every milestone is done. Time to practice interviews.</p>':`<div class="mt-3 text-xs text-[var(--mu)]">${p.m[nx][0]}</div><div class="font-bold">${p.m[nx][1]}</div><p class="text-sm text-[var(--mu)] mt-1">${p.m[nx][2]}</p>`}<button class="btn btn-p w-full mt-5" data-a="nav" data-v="${nx<0?'interviews':'roadmap'}">${nx<0?'Start a mock interview':'Open roadmap'}</button></div></div>`}
+function pRm(){const x=S.user,p=AP[x.goal],dn=x.done.length;
+return `${H1(esc(x.goal)+' roadmap',p.meta+' · '+dn+' of '+p.m.length+' milestones complete')}<div class="card p-6 mt-6"><div class="bar mb-4"><i data-w="${dn/p.m.length*100}"></i></div>${p.m.map(([w,t,d],i)=>{const on=x.done.includes(i);return `<div class="flex gap-4 py-4 ${i?'border-t':''}" style="border-color:var(--line)"><button class="w-8 h-8 shrink-0 rounded-full grid place-items-center ${on?'grad':''}" style="${on?'':'border:2px solid var(--line)'}" data-a="ms" data-v="${i}" role="checkbox" aria-checked="${on}" aria-label="Mark ${esc(t)} as ${on?'not done':'done'}">${on?ic('<path d="M5 12l5 5 9-10"/>',16):''}</button><div><div class="text-xs text-[var(--mu)]">${w}</div><div class="fd font-bold text-lg ${on?'line-through opacity-60':''}">${t}</div><div class="text-sm text-[var(--mu)]">${d}</div></div></div>`}).join('')}</div>`}
+function pSk(){const x=S.user;return `${H1('Skills','Your starting levels come from onboarding and rise as you practice.')}<div class="mt-6 grid sm:grid-cols-2 gap-4">${Object.entries(x.sk).map(([n,v])=>`<div class="card p-5">${bar([n,v])}<div class="mt-4 flex justify-between items-center text-xs text-[var(--mu)]"><span>${v<40?'Needs focus':v<70?'Building':'Strong'}</span><button class="text-blue-300 text-sm" data-a="nav" data-v="practice">Practice</button></div></div>`).join('')}</div>`}
+function pPr(){const x=S.user;return `${H1('Practice labs','Exercises are simulated for now. Completing a set adds 6 points to that skill and is saved to your account.')}<div class="mt-6 space-y-3">${Object.keys(x.sk).map(n=>{const d=x.drills[n];return `<div class="card p-5 flex flex-wrap items-center justify-between gap-3"><div><div class="font-bold fd">${esc(n)} practice set</div><div class="text-sm text-[var(--mu)]">20 minutes · 8 exercises</div></div><button class="btn ${d?'btn-g':'btn-p'} !py-2" data-a="drill" data-v="${esc(n)}" ${d?'disabled':''}>${d?'Completed':'Mark complete'}</button></div>`}).join('')}</div>`}
+function pIv(){return `${H1('Mock interview','Pick a question and write your answer to get feedback.')}<div class="mt-6 flex flex-wrap gap-2">${QS.map((q,i)=>`<button class="opt !py-2 !px-4 !rounded-full text-sm" data-a="q" data-v="${i}" aria-pressed="${S.q==i}">Question ${i+1}</button>`).join('')}</div><div class="card p-6 mt-4"><div class="fd text-xl font-bold">${QS[S.q]}</div><label for="ans" class="sr-only">Your answer</label><textarea id="ans" rows="6" class="fi w-full mt-4" placeholder="Describe the situation, your action, and the result…"></textarea><p id="e-ans" class="err" role="alert"></p><button class="btn btn-p mt-2" data-a="fb">Get feedback</button><div id="fbk" class="mt-5"></div></div>`}
+function pSt(){const x=S.user;return `${H1('Settings','Update your profile and target role.')}<div class="grid lg:grid-cols-2 gap-4 mt-6"><form id="f-set" novalidate class="card p-6 space-y-4"><h2 class="fd font-bold text-lg">Profile and goal</h2>${F('st-name','Full name','text','Your name','name',x.name)}<div><label for="st-goal" class="block text-sm mb-1.5 text-[var(--mu)]">Target role</label><select id="st-goal" class="fi w-full">${Object.keys(AP).map(g=>`<option ${g===x.goal?'selected':''}>${g}</option>`).join('')}</select></div><div><label for="st-hrs" class="block text-sm mb-1.5 text-[var(--mu)]">Hours per week (2–40)</label><input id="st-hrs" type="number" class="fi w-full" value="${x.hours}" aria-describedby="e-st-hrs"><p id="e-st-hrs" class="err" role="alert"></p></div><button class="btn btn-p">Save changes</button></form><div class="card p-6"><h2 class="fd font-bold text-lg">Account</h2><p class="text-sm text-[var(--mu)] mt-2">Signed in as ${esc(x.email)}</p><div class="space-y-3 mt-5"><button class="btn btn-g w-full" data-a="logout">Log out</button><button class="btn btn-g w-full !text-red-300" data-a="reset">Reset my progress</button></div>${NOTE}</div></div>`}
+
+/* ---------- Router (hash: login, signup, onboarding, dashboard; anything else = landing page) ---------- */
+function R(){let h=location.hash.slice(1),x=S.user;
+ if(!S.booting){
+  if(h==='dashboard'&&(!x||!x.onboarded))h=x?'onboarding':'login';
+  if(h==='onboarding'&&(!x||x.onboarded))h=x?'dashboard':'login';
+  if(h==='verify'&&!S.pending)h=x?'dashboard':'login';
+  if((h==='login'||h==='signup')&&x)h=x.onboarded?'dashboard':'onboarding'}
+ const app=['login','signup','verify','onboarding','dashboard'].includes(h);
+ $('#site').classList.toggle('hidden',app);$('#views').classList.toggle('hidden',!app);
+ if(!app)return;
+ if(location.hash.slice(1)!==h)history.replaceState(null,'','#'+h);
+ if(S.booting){$('#views').innerHTML=loader();return}
+ if(h==='dashboard')renderDash();else $('#views').innerHTML=h==='onboarding'?obView():authView(h);
+ window.scrollTo(0,0)}
+addEventListener('hashchange',R);
+
+/* ---------- Events ---------- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;if(b.dataset.plan)S.plan=b.dataset.plan;go(b.dataset.go)});
+const focusBack=(a,v)=>{const n=[...document.querySelectorAll('#views [data-a="'+a+'"]')].find(b=>b.dataset.v===v);if(n)n.focus()};
+$('#views').addEventListener('click',e=>{
+ const eye=e.target.closest('[data-eye]');if(eye){const i=$('#'+eye.dataset.eye),s=i.type==='password';i.type=s?'text':'password';eye.textContent=s?'Hide':'Show';eye.setAttribute('aria-label',s?'Hide password':'Show password');return}
+ const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,v=t.dataset.v,x=S.user,o=S.ob;
+ if(a==='retry')saveNow();else if(a==='resend')resend(t)
+ else if(a==='logout')doLogout()
+ else if(['goal','level','status'].includes(a)){o[a]=v;$('#views').innerHTML=obView();focusBack(a,v)}
+ else if(a==='skill'){const i=o.skills.indexOf(v);if(i>=0)o.skills.splice(i,1);else if(o.skills.length>=8){$('#e-ob').textContent='You can pick up to 8 skills.';return}else o.skills.push(v);$('#views').innerHTML=obView();focusBack(a,v)}
+ else if(a==='back'){o.step--;$('#views').innerHTML=obView()}
+ else if(a==='next'){const m=[o.goal?'':'Choose a target role to continue.',o.level&&o.status?'':'Select your experience level and your current status.',o.skills.length>=2?'':'Pick at least 2 skills so we can set your starting point.'][o.step];if(m){$('#e-ob').textContent=m;return}o.step++;$('#views').innerHTML=obView()}
+ else if(a==='finish')finishOb(t)
+ else if(a==='nav'){S.view=v;panel();window.scrollTo(0,0)}
+ else if(a==='ms'){const i=+v,k=x.done.indexOf(i);if(k>=0)x.done.splice(k,1);else{x.done.push(i);touch(x)}panel();dirty()}
+ else if(a==='drill'){x.drills[v]=1;x.sk[v]=Math.min(100,x.sk[v]+6);x.hrs+=.33;touch(x);panel();dirty();T(v+' improved by 6 points.')}
+ else if(a==='q'){S.q=+v;panel()}
+ else if(a==='fb'){const s=val('ans').trim();if(s.length<40){err('ans','Write at least 40 characters so there’s something to review.');return}err('ans','');
+  const w=s.split(/\s+/).length,kw=['situation','task','action','result','learned','because','team','impact','%'].filter(k=>s.toLowerCase().includes(k)).length,sc=Math.min(96,Math.round(45+Math.min(w,120)/120*30+kw*4));
+  $('#fbk').innerHTML=`<div class="rounded-2xl p-5" style="background:rgba(59,130,255,.1);border:1px solid var(--line)"><div class="flex items-center gap-3"><div class="fd text-4xl font-extrabold gtxt">${sc}</div><div class="text-sm text-[var(--mu)]">Answer score<br>${w} words</div></div><ul class="mt-3 text-sm space-y-1.5 list-disc pl-5"><li>${w<60?'Add more detail: aim for 60–120 words.':'Good length for a spoken answer.'}</li><li>${kw<3?'Structure it as situation, action, result.':'Clear structure. Keep the result measurable.'}</li><li>Close with what you learned.</li></ul><p class="mt-3 text-xs text-[var(--mu)]">Demo scoring: a simple word-count check, not a real AI model.</p></div>`}
+ else if(a==='reset'){if(t.dataset.c){x.done=[];x.drills={};x.hrs=0;x.streak=0;x.last='';x.sk=baseSk(Object.keys(x.sk),x.level);panel();dirty();T('Progress reset.')}else{t.dataset.c=1;t.textContent='Click again to confirm reset'}}
+});
+document.addEventListener('submit',e=>{const f=e.target;if(!f.id)return;e.preventDefault();
+ if(f.id==='f-login')doLogin(f);else if(f.id==='f-signup')doSignup(f);else if(f.id==='f-set')doSettings(f);else if(f.id==='f-cfg')doCfg(f)});
+const live={'li-email':V.email,'su-email':V.email,'su-name':V.name,'su-pw':V.pw,'su-cf':V.cf,'st-name':V.name};
+document.addEventListener('focusout',e=>{const i=e.target,f=live[i.id];if(f&&i.value)f(i.id)});
+document.addEventListener('input',e=>{const i=e.target;
+ if(i.id==='hrs'){S.ob.hours=+i.value;$('#hv').textContent=i.value+' hours'}
+ if(i.id==='su-pw'){const p=i.value,s=[p.length>=8,p.length>=12,/[a-z]/.test(p)&&/[A-Z]/.test(p),/\d/.test(p)&&/[^\w\s]/.test(p)].filter(Boolean).length;document.querySelectorAll('#meter i').forEach((b,k)=>b.style.background=k<s?['#f87171','#fbbf24','#60a5fa','#34d399'][s-1]:'rgba(255,255,255,.1)');$('#mtxt').textContent=p?['Weak','Fair','Good','Strong'][Math.max(s-1,0)]:''}
+ if(i.classList&&i.classList.contains('bad'))err(i.id,'')});
+
+/* ===================== SUPABASE MODULE ===================== */
+const VERIFY='__verify__';
+const friendly=e=>{if(!e)return 'Something went wrong. Please try again.';const m=String(e.message||'').toLowerCase(),c=e.code||'';
+ if(c==='email_not_confirmed'||m.includes('email not confirmed'))return VERIFY;
+ if(m.includes('invalid login'))return 'That email and password don’t match.';
+ if(c==='user_already_exists'||m.includes('already registered'))return 'An account with this email already exists. Try logging in.';
+ if(c==='weak_password'||(m.includes('password')&&m.includes('should be')))return 'Choose a stronger password (at least 8 characters, with a letter and a number).';
+ if(e.status===429||/rate limit|too many/.test(m))return 'Too many attempts. Please wait a minute and try again.';
+ if(c==='42501'||m.includes('row-level security'))return 'Your account isn’t allowed to save this data. Check the RLS policies on your profiles table.';
+ if(['42P01','42703','PGRST204','PGRST205'].includes(c)||m.includes('schema cache'))return 'The profiles table or one of its columns wasn’t found. Check your table setup.';
+ if(['22P02','23514','23502'].includes(c))return 'The database didn’t accept the profile data. Check your column types and constraints.';
+ if(/fetch|network|failed to/.test(m))return 'Can’t reach the server. Check your connection and try again.';
+ return 'Something went wrong. Please try again.'};
+const ld=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+function touch(x){const t=ld(new Date());if(x.last===t)return;const y=new Date();y.setDate(y.getDate()-1);x.streak=x.last===ld(y)?x.streak+1:1;x.last=t}
+const baseSk=(names,level)=>{const o={};names.forEach(n=>o[n]=Math.min(95,(LVBASE[level]||18)+[...n].reduce((s,c)=>s+c.charCodeAt(0),0)%16));return o};
+const syncText=()=>S.sync==='saving'?'Saving changes…':S.sync==='error'?'Couldn’t save your latest changes. <button class="underline" data-a="retry">Retry</button>':'All changes saved to your account.';
+const setSync=s=>{S.sync=s;const e=$('#sync');if(e)e.innerHTML=syncText()};
+/* row <-> app state. The id always comes from the authenticated session, never from user input. */
+const toRow=x=>({id:x.id,full_name:x.name,career_goal:x.goal||null,experience_level:x.level||null,current_status:x.status||null,skills:Object.keys(x.sk),weekly_hours:x.hours,progress:{v:1,roadmap_done:x.done,drills:x.drills,skill_levels:x.sk,streak:x.streak,hours_studied:Math.round(x.hrs*100)/100,last_active:x.last}});
+function fromRow(r,u){const p=r.progress&&typeof r.progress==='object'?r.progress:{},sk={};
+ const names=Array.isArray(r.skills)?r.skills:[];names.forEach(n=>{const v=p.skill_levels&&p.skill_levels[n];sk[n]=typeof v==='number'?v:(LVBASE[r.experience_level]||18)});
+ const ok=!!(AP[r.career_goal]&&LV.includes(r.experience_level)&&ST.includes(r.current_status)&&names.length),len=ok?AP[r.career_goal].m.length:0;
+ return{id:u.id,email:u.email||'',name:r.full_name||(u.email||'').split('@')[0],goal:ok?r.career_goal:'',level:r.experience_level||'',status:r.current_status||'',hours:r.weekly_hours||6,sk,done:Array.isArray(p.roadmap_done)?p.roadmap_done.filter(i=>Number.isInteger(i)&&i>=0&&i<len):[],drills:p.drills&&typeof p.drills==='object'?p.drills:{},streak:+p.streak||0,hrs:+p.hours_studied||0,last:p.last_active||'',onboarded:ok}}
+/* saves are serialized so an older request can never overwrite a newer one */
+let saveT=null,chain=Promise.resolve();
+async function doSave(){const x=S.user;if(!x||!sb)return{ok:false};setSync('saving');
+ const{error}=await sb.from('profiles').upsert(toRow(x),{onConflict:'id'});
+ if(error){console.error(error);setSync('error');return{ok:false,error}}
+ setSync('saved');return{ok:true}}
+const saveNow=()=>{clearTimeout(saveT);return chain=chain.then(doSave)};
+const dirty=()=>{setSync('saving');clearTimeout(saveT);saveT=setTimeout(saveNow,600)};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&S.sync==='saving')saveNow()});
+addEventListener('pagehide',()=>{if(S.sync==='saving')saveNow()});
+/* load (or create) the signed-in user's single profile row; RLS limits every query to their own row */
+let hp=null;
+const hydrate=u=>hp||(hp=(async()=>{
+ let{data:row,error}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
+ if(error)throw error;
+ if(!row){const nm=(u.user_metadata&&u.user_metadata.full_name)||(u.email||'').split('@')[0]||'';
+  const ins=await sb.from('profiles').upsert({id:u.id,full_name:nm},{onConflict:'id'}).select().single();
+  if(ins.error)throw ins.error;row=ins.data}
+ S.user=fromRow(row,u);S.uid=u.id;S.ob=null;S.view='overview';S.sync='saved'})().finally(()=>{hp=null}));
+async function enter(u){if(S.uid!==u.id)await hydrate(u);S.notice='';syncNav();go(S.user.onboarded?'dashboard':'onboarding')}
+async function failAuth(e){console.error(e);S.notice=friendly(e)===VERIFY?'Please verify your email first.':friendly(e);S.user=null;S.uid=null;try{await sb.auth.signOut()}catch(x){}syncNav();go('login')}
+const bad=f=>{const n=f.querySelector('.bad');if(n)n.focus()};
+const sbReady=()=>!cfgError()&&!!sb;
+const emailOpts=()=>/^https?:$/.test(location.protocol)?{emailRedirectTo:location.origin+location.pathname}:{};
+async function doLogin(f){if(![V.email('li-email'),V.pw1('li-pw')].every(Boolean))return bad(f);
+ if(!sbReady()){$('#e-form').textContent='Connect Supabase first (see the Setup needed box).';return}
+ const em=val('li-email').trim().toLowerCase(),b=f.querySelector('button:not([type=button])');b.disabled=true;b.textContent='Logging in…';
+ const reset=()=>{b.disabled=false;b.textContent='Log in'};
+ const{data,error}=await sb.auth.signInWithPassword({email:em,password:val('li-pw')});
+ if(error){console.error(error);reset();const m=friendly(error);if(m===VERIFY){S.pending=em;go('verify');return}$('#e-form').textContent=m;return}
+ try{await enter(data.session.user)}catch(e){reset();failAuth(e)}}
+async function doSignup(f){const ok=[V.name('su-name'),V.email('su-email'),V.pw('su-pw'),V.cf('su-cf'),err('terms',$('#terms').checked?'':'Please accept the Terms and Privacy Policy to continue.')].every(Boolean);if(!ok)return bad(f);
+ if(!sbReady()){$('#e-form').textContent='Connect Supabase first (see the Setup needed box).';return}
+ const em=val('su-email').trim().toLowerCase(),b=f.querySelector('button:not([type=button])');b.disabled=true;b.textContent='Creating account…';
+ const reset=()=>{b.disabled=false;b.textContent='Create account'};
+ const{data,error}=await sb.auth.signUp({email:em,password:val('su-pw'),options:{data:{full_name:val('su-name').trim()},...emailOpts()}});
+ if(error){console.error(error);reset();const m=friendly(error);$('#e-form').textContent=m===VERIFY?'Please verify your email, then log in.':m;return}
+ if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){reset();$('#e-form').textContent='This email may already be registered. Try logging in, or check your inbox for a confirmation email.';return}
+ if(data.session){try{await enter(data.session.user)}catch(e){reset();failAuth(e)}return}
+ S.pending=em;go('verify')}   /* email confirmation is on: no session until the link is opened */
+async function finishOb(b){const x=S.user,o=S.ob;b.disabled=true;b.textContent='Saving…';
+ Object.assign(x,{goal:o.goal,level:o.level,status:o.status,hours:o.hours,done:[],drills:{},hrs:0,streak:0,last:'',sk:baseSk(o.skills,o.level)});
+ const r=await saveNow();
+ if(!r.ok){b.disabled=false;b.textContent='Build my roadmap';const m=friendly(r.error);$('#e-ob').textContent=m===VERIFY?'Please log in again.':m;return}
+ x.onboarded=true;S.ob=null;S.view='overview';T('Your roadmap is ready!');go('dashboard')}
+async function doSettings(f){const hr=+val('st-hrs'),ok=[V.name('st-name'),err('st-hrs',Number.isInteger(hr)&&hr>=2&&hr<=40?'':'Enter a whole number from 2 to 40.')].every(Boolean);if(!ok)return bad(f);
+ const g=val('st-goal');if(!AP[g])return;const x=S.user,prev={name:x.name,hours:x.hours,goal:x.goal,done:x.done},ch=g!==x.goal,b=f.querySelector('button');b.disabled=true;b.textContent='Saving…';
+ x.name=val('st-name').trim();x.hours=hr;x.goal=g;if(ch)x.done=[];
+ const r=await saveNow();
+ if(!r.ok){Object.assign(x,prev);b.disabled=false;b.textContent='Save changes';$('#e-st-hrs').textContent=friendly(r.error);return}
+ renderDash();T(ch?'Saved. Your roadmap was reset for the new role.':'Changes saved.')}
+function doCfg(f){const u=val('cfg-url').trim().replace(/\/+$/,''),k=val('cfg-key').trim(),m=cfgCheck(u,k);if(m){$('#e-cfg').textContent=m;return}
+ try{localStorage.setItem('sb_cfg',JSON.stringify({url:u,key:k}))}catch(e){$('#e-cfg').textContent='Couldn’t save in this browser. Paste the values into the file instead.';return}location.reload()}
+async function doLogout(){if(S.user)await saveNow();if(sb){const{error}=await sb.auth.signOut();if(error)console.error(error)}
+ S.user=null;S.uid=null;S.ob=null;S.view='overview';S.pending=null;clearTimeout(saveT);syncNav();T('You’ve been logged out.');go('login')}
+async function resend(b){if(!sbReady()||!S.pending)return;b.disabled=true;const msg=$('#resend-msg');msg.textContent='Sending…';
+ const{error}=await sb.auth.resend({type:'signup',email:S.pending,options:emailOpts()});
+ if(error){console.error(error);const m=friendly(error);msg.textContent=m===VERIFY?'Couldn’t send the email. Try again shortly.':m;b.disabled=false;return}
+ msg.textContent='Confirmation email sent. Check your inbox and spam folder.';let n=30;b.textContent='Resend in 30s';
+ const iv=setInterval(()=>{if(!b.isConnected)return clearInterval(iv);if(--n<=0){clearInterval(iv);b.disabled=false;b.textContent='Resend email';return}b.textContent='Resend in '+n+'s'},1000)}
+const verifyHTML=()=>`<div class="text-center"><div class="w-14 h-14 mx-auto rounded-2xl grad grid place-items-center">${ic('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',26)}</div><h1 class="mt-5 text-3xl font-extrabold">Check your email</h1><p class="mt-3 text-[var(--mu)]">We sent a confirmation link to <b class="text-white">${esc(S.pending||'')}</b>. Open it to verify your account, then log in.</p><p id="resend-msg" class="text-sm text-[var(--mu)] mt-4 min-h-[1.25rem]" role="status"></p><button class="btn btn-p w-full mt-2" data-a="resend">Resend email</button><a href="#login" class="btn btn-g w-full mt-3">Go to login</a></div>`;
+const topNote=()=>{const e=cfgError();return(e?`<div class="mb-6 rounded-xl p-4 text-sm" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.35)" role="alert"><b class="text-amber-300">Setup needed.</b> <span class="text-[var(--mu)]">${esc(e)}</span><form id="f-cfg" novalidate class="mt-3 space-y-2"><input id="cfg-url" class="fi w-full !py-2" placeholder="https://your-project.supabase.co" aria-label="Supabase project URL" autocomplete="off"><input id="cfg-key" class="fi w-full !py-2" placeholder="Publishable key" aria-label="Supabase publishable key" autocomplete="off"><p id="e-cfg" class="err" role="alert"></p><button class="btn btn-g w-full !py-2">Save and reload</button></form><p class="text-xs text-[var(--mu)] mt-2">Saved only in this browser. You can also paste them into SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY at the top of the script.</p></div>`:'')+(S.notice?`<div class="mb-6 rounded-xl p-4 text-sm text-[var(--mu)]" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.35)" role="alert">${esc(S.notice)}</div>`:'')};
+const loader=()=>`<div class="min-h-screen grid place-items-center"><div class="text-center"><div class="spin mx-auto"></div><p class="mt-4 text-[var(--mu)]">Loading your account…</p></div></div>`;
+function syncNav(){const on=!!S.user;document.querySelectorAll('#nav .btn-g[data-go]').forEach(b=>{b.dataset.go=on?'dashboard':'login';b.textContent=on?'Dashboard':'Login'});document.querySelectorAll('#nav .btn-p[data-go]').forEach(b=>b.style.display=on?'none':'')}
+if(sb)sb.auth.onAuthStateChange((ev,session)=>{setTimeout(async()=>{   /* never await Supabase calls inside this callback itself */
+ if(ev==='SIGNED_OUT'){if(S.uid){S.user=null;S.uid=null;S.ob=null;syncNav();R()}return}
+ if(!S.booting&&session&&session.user&&S.uid!==session.user.id){try{await enter(session.user)}catch(e){failAuth(e)}}},0)});
+async function boot(){R();
+ if(sb){try{const{data}=await sb.auth.getSession();if(data.session)await hydrate(data.session.user)}catch(e){console.error(e);S.notice=friendly(e);S.user=null;S.uid=null;try{await sb.auth.signOut()}catch(x){}}}
+ S.booting=false;syncNav();
+ if(/error_description=/.test(BOOT_HASH)){S.notice='That email link is invalid or has expired. Log in, or sign up again to get a new confirmation email.';history.replaceState(null,'',location.pathname+location.search+'#login')}
+ if(/access_token=/.test(BOOT_HASH)&&S.user){go(S.user.onboarded?'dashboard':'onboarding');return}
+ R()}
+boot();
+</script>
+</body>
+</html>
